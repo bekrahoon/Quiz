@@ -10,5 +10,5 @@
 4. Миграции: `python manage.py makemigrations && python manage.py migrate`
 5. Запуск: `python manage.py runserver`
 
-- Игра: /quiz/
-- Админ: /questions/
+Админ может редактировать вопросы
+Игрок может менять никнейм и просматривать свои результаты ответов
