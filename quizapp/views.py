@@ -4,6 +4,42 @@ from .models import Question
 from .forms import QuestionForm 
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.forms import UserCreationForm
+from django.urls import reverse_lazy
+from django.views.generic.edit import FormView
+from django.contrib.auth import authenticate, login, logout
+
+# Кастомный login (без встроенного LoginView)
+class CustomLoginView(View):
+    def get(self, request):
+        return render(request, 'login.html')  # Показ формы
+    
+    def post(self, request):
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('home')  # Redirect на home после login
+        else:
+            # Ошибка: неверные credentials
+            return render(request, 'login.html', {'error': 'Неверный логин или пароль'})
+
+# Кастомный logout (без встроенного LogoutView)
+class CustomLogoutView(View):
+    def post(self, request):  # Только POST для безопасности
+        logout(request)
+        return redirect('home')  # Redirect на home после logout
+    
+# Регистрация пользователя
+class RegisterView(FormView):
+    template_name = 'register.html'
+    form_class = UserCreationForm
+    success_url = reverse_lazy('login')  # Redirect на login после регистрации
+
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
 
 # Read: Список вопросов (только для админов)
 class QuestionListView(LoginRequiredMixin, UserPassesTestMixin, View):

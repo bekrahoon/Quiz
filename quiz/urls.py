@@ -1,13 +1,14 @@
 from django.contrib import admin
 from django.urls import path
 from quizapp import views
+from django.urls import reverse_lazy 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.HomeView.as_view(), name='home'),
-    path('login/', views.LoginView.as_view(template_name='login.html'), name='login'),
-    path('logout/', views.LogoutView.as_view(next_page='home'), name='logout'),
-    # CRUD URLs
+    path('register/', views.RegisterView.as_view(), name='register'),
+    path('login/', views.CustomLoginView.as_view(), name='login'),
+    path('logout/', views.CustomLogoutView.as_view(), name='logout'),
     path('questions/', views.QuestionListView.as_view(), name='question_list'),
     path('questions/create/', views.QuestionCreateView.as_view(), name='question_create'),
     path('questions/<int:pk>/update/', views.QuestionUpdateView.as_view(), name='question_update'),
