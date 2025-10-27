@@ -36,6 +36,20 @@ class RegisterView(FormView):
         form.save()
         return super().form_valid(form)
 
+
+class ProfileUpdateView(LoginRequiredMixin, View):
+    def get(self, request):
+        form = UserCreationForm(instance=request.user)
+        return render(request, 'profile_update.html', {'form': form})
+    
+    def post(self, request):
+        form = UserCreationForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+        return render(request, 'profile_update.html', {'form': form})
+
+
 class QuestionListView(LoginRequiredMixin, UserPassesTestMixin, View):
     def test_func(self):
         return self.request.user.is_superuser
