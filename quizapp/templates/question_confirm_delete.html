@@ -1,0 +1,11 @@
+{% extends 'quizapp/base.html' %}
+
+{% block content %}
+<h2>Удалить вопрос?</h2>
+<p>Вы уверены, что хотите удалить "{{ question.text }}"?</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Да, удалить</button>
+    <a href="{% url 'question_list' %}" class="btn btn-secondary">Отмена</a>
+</form>
+{% endblock %}
