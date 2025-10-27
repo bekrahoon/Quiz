@@ -4,6 +4,7 @@ from quizapp import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', views.HomeView.as_view(), name='home'),
     # CRUD URLs
     path('questions/', views.QuestionListView.as_view(), name='question_list'),
     path('questions/create/', views.QuestionCreateView.as_view(), name='question_create'),

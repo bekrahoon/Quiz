@@ -3,6 +3,11 @@ from django.views import View
 from .models import Question
 from .forms import QuestionForm  # Создадим форму ниже
 
+
+class HomeView(View):
+    def get(self, request):
+        return render(request, 'home.html')
+
 # Read: Список вопросов
 class QuestionListView(View):
     def get(self, request):

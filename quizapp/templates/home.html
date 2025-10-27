@@ -1,0 +1,12 @@
+{% extends 'quizapp/base.html' %}
+
+{% block content %}
+<div class="jumbotron text-center">
+    <h1 class="display-4">Добро пожаловать в Quiz Game!</h1>
+    <p class="lead">Пройдите викторину и проверьте свои знания.</p>
+    <hr class="my-4">
+    <p>Выберите раздел:</p>
+    <a class="btn btn-primary btn-lg" href="{% url 'quiz' %}" role="button">Начать игру</a>
+    <a class="btn btn-secondary btn-lg" href="{% url 'question_list' %}" role="button">Управление вопросами</a>
+</div>
+{% endblock %}
