@@ -5,6 +5,8 @@ from quizapp import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.HomeView.as_view(), name='home'),
+    path('login/', views.LoginView.as_view(template_name='login.html'), name='login'),
+    path('logout/', views.LogoutView.as_view(next_page='home'), name='logout'),
     # CRUD URLs
     path('questions/', views.QuestionListView.as_view(), name='question_list'),
     path('questions/create/', views.QuestionCreateView.as_view(), name='question_create'),
