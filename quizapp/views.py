@@ -1,12 +1,16 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from .models import Question
-from .forms import QuestionForm 
+from .forms import QuestionForm, ProfileForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views.generic.edit import FormView
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User  
+from django import forms  
+
+
 
 class CustomLoginView(View):
     def get(self, request):
@@ -35,20 +39,6 @@ class RegisterView(FormView):
     def form_valid(self, form):
         form.save()
         return super().form_valid(form)
-
-
-class ProfileUpdateView(LoginRequiredMixin, View):
-    def get(self, request):
-        form = UserCreationForm(instance=request.user)
-        return render(request, 'profile_update.html', {'form': form})
-    
-    def post(self, request):
-        form = UserCreationForm(request.POST, instance=request.user)
-        if form.is_valid():
-            form.save()
-            return redirect('home')
-        return render(request, 'profile_update.html', {'form': form})
-
 
 class QuestionListView(LoginRequiredMixin, UserPassesTestMixin, View):
     def test_func(self):
@@ -123,3 +113,15 @@ class QuizResultView(View):
                 score += 1
         total = questions.count()
         return render(request, 'result.html', {'score': score, 'total': total})
+
+class ProfileUpdateView(LoginRequiredMixin, View):
+    def get(self, request):
+        form = ProfileForm(instance=request.user)  
+        return render(request, 'profile_form.html', {'form': form})
+    
+    def post(self, request):
+        form = ProfileForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('home')  
+        return render(request, 'profile_form.html', {'form': form})
