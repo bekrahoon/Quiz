@@ -47,3 +47,21 @@ class QuestionDeleteView(View):
         question = get_object_or_404(Question, pk=pk)
         question.delete()
         return redirect('question_list')
+    
+# Quiz: Главная страница игры
+class QuizView(View):
+    def get(self, request):
+        questions = Question.objects.all()
+        return render(request, 'quiz.html', {'questions': questions})
+
+# Результат: Обработка ответов (POST)
+class QuizResultView(View):
+    def post(self, request):
+        questions = Question.objects.all()
+        score = 0
+        for question in questions:
+            selected = request.POST.get(f'question_{question.id}')
+            if selected and int(selected) == question.correct_option:
+                score += 1
+        total = questions.count()
+        return render(request, 'result.html', {'score': score, 'total': total})

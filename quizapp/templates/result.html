@@ -1,0 +1,7 @@
+{% extends 'quizapp/base.html' %}
+
+{% block content %}
+<h2>Результат викторины</h2>
+<p>Вы набрали {{ score }} из {{ total }} очков!</p>
+<a href="{% url 'quiz' %}" class="btn btn-primary">Играть снова</a>
+{% endblock %}
