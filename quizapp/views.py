@@ -1,15 +1,12 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
-from .models import Question
+from .models import Question, Result
 from .forms import QuestionForm, ProfileForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views.generic.edit import FormView
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User  
-from django import forms  
-
 
 
 class CustomLoginView(View):
@@ -112,6 +109,14 @@ class QuizResultView(View):
             if selected and int(selected) == question.correct_option:
                 score += 1
         total = questions.count()
+        
+        if request.user.is_authenticated:
+            Result.objects.create(
+                user=request.user,
+                score=score,
+                total=total
+            )
+        
         return render(request, 'result.html', {'score': score, 'total': total})
 
 class ProfileUpdateView(LoginRequiredMixin, View):
@@ -125,3 +130,8 @@ class ProfileUpdateView(LoginRequiredMixin, View):
             form.save()
             return redirect('home')  
         return render(request, 'profile_form.html', {'form': form})
+    
+class ResultListView(LoginRequiredMixin, View):
+    def get(self, request):
+        results = Result.objects.filter(user=request.user).order_by('-date')
+        return render(request, 'result_list.html', {'results': results})

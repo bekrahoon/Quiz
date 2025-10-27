@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Мои результаты</h2>
+    <hr>
+    {% if results %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>№</th>
+                <th>Результат</th>
+                <th>Процент</th>
+                <th>Дата прохождения</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for result in results %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ result.score }} / {{ result.total }}</td>
+                <td>
+                    {% widthratio result.score result.total 100 %}%
+                </td>
+                <td>{{ result.date|date:"d.m.Y H:i" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="alert alert-info">
+        <p>У вас пока нет результатов. <a href="{% url 'quiz' %}">Пройдите викторину</a> прямо сейчас!</p>
+    </div>
+    {% endif %}
+    <a href="{% url 'home' %}" class="btn btn-primary mt-3">На главную</a>
+</div>
+{% endblock %}
